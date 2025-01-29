@@ -12,7 +12,7 @@
 
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css" />
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet" />
@@ -21,6 +21,7 @@
 </head>
 
 <body id="page-top">
+    @include('fragment.alert')
     <div id="wrapper">
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <a class="sidebar-brand d-flex align-items-center justify-content-center">
@@ -30,7 +31,7 @@
             <hr class="sidebar-divider my-0" />
 
             <li class="nav-item active">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ route(Auth::user()->role) }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -48,8 +49,8 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Daftar Kursus:</h6>
-                        <a class="collapse-item" href="">Menjahit</a>
-                        <a class="collapse-item" href="">Membuat Kue</a>
+                        <a class="collapse-item" href="{{ route('sew') }}">Menjahit</a>
+                        <a class="collapse-item" href="{{ route('cake') }}">Membuat Kue</a>
                     </div>
                 </div>
             </li>
@@ -64,8 +65,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Agenda Anda:</h6>
-                        <a class="collapse-item" href="">Jadwal Dan Status</a>
-                        <a class="collapse-item" href="">Print Laporan</a>
+                        <a class="collapse-item" href="{{ route('jadwal') }}">Jadwal Dan Status</a>
+                        <a class="collapse-item" href="{{ route('laporan') }}">Print Laporan</a>
                     </div>
                 </div>
             </li>
@@ -123,28 +124,35 @@
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
-                                <span class="badge badge-danger badge-counter"></span>
+                                <span class="badge badge-danger badge-counter">{{ $totalPemberitahuan }}</span>
                             </a>
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">Pusat Peringatan</h6>
 
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        {{-- <div
-                                            class="icon-circle {{ $notif->type == 'info' ? 'bg-primary' : ($notif->type == 'warning' ? 'bg-warning' : 'bg-danger') }}">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div> --}}
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500"></div>
-                                        <span class="font-weight-bold"></span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Tidak Ada
-                                    Notif</a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Tampilkan
-                                    Semua Peringatan</a>
+                                @forelse ($pemberitahuan as $notif)
+                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <div class="mr-3">
+                                            <div class="icon-circle bg-primary">
+                                                <i class="fas fa-file-alt text-white">{{ $totalPemberitahuan }}</i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="small text-gray-500">
+                                            </div>
+                                            <span class="font-weight-bold">{{ $notif->pesan }}</span>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <a class="dropdown-item text-center small text-gray-500" href="#">Tidak Ada
+                                        Notif</a>
+                                @endforelse
+
+                                @if ($pemberitahuan->count() > 0)
+                                    <a class="dropdown-item text-center small text-gray-500" href="#">Tampilkan
+                                        Semua Peringatan</a>
+                                @endif
+
                             </div>
                         </li>
 
@@ -153,8 +161,10 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">User</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile_2.svg" />
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                <img class="img-profile rounded-circle"
+                                    src="{{ asset('assets/images/undraw_profile_2.svg') }}" />
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
@@ -198,7 +208,7 @@
                                                 Mendaftar Kursus
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                {{-- {{ $kursusString ?: '-' }} --}}
+                                                {{ $kursus ?? '-' }}
                                             </div>
                                         </div>
                                         <div class="col-auto">
@@ -237,7 +247,7 @@
                                                 Total Kursus Yang Telah Disetujui
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                {{-- {{ $totalDisetujui }} --}}
+                                                {{ $totalDisetujui }}
                                             </div>
                                         </div>
                                         <div class="col-auto">
@@ -277,7 +287,7 @@
                                     </h6>
                                 </div>
                                 <div class="card-body">
-                                    {{-- <p>{{ $berita->konten }}</p> --}}
+                                    <p>{{ $berita->konten }}</p>
                                 </div>
                             </div>
                         </div>
