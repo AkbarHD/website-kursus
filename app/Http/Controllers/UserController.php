@@ -70,7 +70,7 @@ class UserController extends Controller
         $isRegistered = Kursus::where('email', $email)->where('kursus', 'sew')->exists();
         $pemberitahuan = Pemberitahuan::where('email', $email)->get();
         $totalPemberitahuan = $pemberitahuan->count();
-        return view('user.cake', [
+        return view('user.sew', [
             'isRegistered' => $isRegistered,
             'pemberitahuan' => $pemberitahuan,
             'totalPemberitahuan' => $totalPemberitahuan

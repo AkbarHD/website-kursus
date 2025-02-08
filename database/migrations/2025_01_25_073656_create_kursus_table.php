@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->enum('kursus', ['sew', 'cake']);
             $table->enum('status', ['ditinjau', 'disetujui', 'ditolak'])->default('ditinjau');
             $table->timestamps();
+            $table->string('cv');
         });
     }
 

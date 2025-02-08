@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
+            'image' => 'admin.png',
             'email_verified_at' => now(),
         ]);
 
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@gmail.com',
             'password' => Hash::make('password'),
             'role' => 'user',
+            'image' => 'user.png',
             'email_verified_at' => now(),
         ]);
 

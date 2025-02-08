@@ -71,7 +71,7 @@
                 </div>
                 <p class="text">Or, sign up with email...</p>
             </div>
-            <form action="{{ route('register') }} " method="post">
+            <form action="{{ route('register') }} " method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="field">
                     <i class="uil uil-at"></i>
@@ -80,6 +80,10 @@
                 <div class="field">
                     <i class="uil uil-user"></i>
                     <input type="text" placeholder="Full name" name="name" required>
+                </div>
+                <div class="field">
+                    <i class="uil uil-user"></i>
+                    <input type="file" name="image" required>
                 </div>
                 <div class="field">
                     <i class="uil uil-lock-alt"></i>

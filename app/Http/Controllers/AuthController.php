@@ -23,6 +23,7 @@ class AuthController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|min:6',
+                'image' => 'required|image|max:1024'
             ],
             [
                 'name.required' => 'Name is required',
@@ -35,10 +36,18 @@ class AuthController extends Controller
         );
 
         try {
+
+            if($request->file('image')){
+                $image = $request->file('image');
+                $imageName = time() . '-' . uniqid() . $image->getClientOriginalExtension();
+                $image->move(public_path('iamges'), $imageName);
+            }
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'image' => $imageName
             ]);
 
             // smtp
